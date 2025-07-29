@@ -16,13 +16,11 @@ const ProductList = () => {
       });
       setProducts(res.data);
     } catch (err) {
-      // Detect network error or server error
       if (err.message === "Network Error") {
         setError("No internet connection or server is not reachable.");
       } else if (err.code === "ECONNABORTED") {
-        setError("Request timed out. Please check your network.");
+        setError("Request timed out. Please check your connection.");
       } else if (err.response) {
-        // Server responded but not 200
         setError(`Server error: ${err.response.status} ${err.response.statusText}`);
       } else {
         setError("Something went wrong. Please try again.");
@@ -36,23 +34,20 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  // UI Return
   return (
-    <div className="px-6 py-8">
+    <div className="px-6 py-8 min-h-[80vh] flex items-center justify-center">
       {loading ? (
         <p className="text-center text-xl text-gray-500">Loading...</p>
       ) : error ? (
-        <div className="flex flex-col items-center justify-center py-16">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg shadow-md max-w-md w-full text-center">
-            <strong className="block text-lg font-semibold mb-2">Oops! Something went wrong.</strong>
-            <span className="block">{error}</span>
-            <button
-              onClick={fetchProducts}
-              className="mt-4 inline-block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-            >
-              Try Again
-            </button>
-          </div>
+        <div className="w-full max-w-md mx-auto bg-red-50 border border-red-400 p-6 rounded-xl shadow-md text-center">
+          <h2 className="text-2xl font-semibold text-red-600 mb-2">Oops! Something went wrong</h2>
+          <p className="text-red-700 text-base mb-4">{error}</p>
+          <button
+            onClick={fetchProducts}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-lg transition duration-300"
+          >
+            Retry
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
